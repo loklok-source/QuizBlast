@@ -136,11 +136,11 @@ input[type=file].hf{display:none;}
 .form-row2 select option{background:#1a1a35;}
 
 /* Share box */
-.share-box{background:var(--card);border-radius:14px;padding:16px 18px;border:1px solid rgba(255,209,102,.15);margin-bottom:16px;}
-.share-title{font-size:.7rem;font-weight:800;color:var(--y);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;}
-.share-steps{font-size:.88rem;font-weight:700;color:#ccc;line-height:1.9;}
+.share-box{background:var(--card);border-radius:14px;padding:20px 22px;border:1px solid rgba(255,209,102,.15);margin-bottom:16px;}
+.share-title{font-size:.8rem;font-weight:800;color:var(--y);text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;}
+.share-steps{font-size:1.15rem;font-weight:700;color:#ccc;line-height:2.2;}
 .share-steps b{color:var(--text);}
-.share-code-inline{font-family:'Futura','Futura PT','Century Gothic','Jost',sans-serif;font-size:1.6rem;color:var(--y);letter-spacing:.12em;}
+.share-code-inline{font-family:'Futura','Futura PT','Century Gothic','Jost',sans-serif;font-size:2.2rem;color:var(--y);letter-spacing:.12em;display:block;margin-top:4px;}
 .hs-footer{width:100%;background:var(--card);border-top:1px solid var(--border);padding:16px 22px;display:flex;align-items:center;justify-content:space-between;gap:11px;flex-wrap:wrap;}
 .status-pill{background:var(--card2);border:1px solid var(--border);padding:8px 16px;border-radius:26px;font-weight:800;color:var(--y);font-size:.88rem;}
 
@@ -334,11 +334,21 @@ input[type=file].hf{display:none;}
 </head>
 <body>
 
-<!-- ══ LOGIN ══ -->
-<div id="login-screen" class="screen active">
+<!-- ══ HOME (public — no login needed) ══ -->
+<div id="home" class="screen active">
+  <div class="home-logo">⚡ QuizBlast</div>
+  <div class="home-sub">Multiplayer quiz — real-time, any device!</div>
+  <div class="home-btns">
+    <button class="btn btn-blue btn-full" onclick="showJoinScreen()">🔑 Join with Code</button>
+    <button class="btn btn-red btn-full" onclick="showHostLogin()">🎮 Host a Game</button>
+  </div>
+</div>
+
+<!-- ══ HOST LOGIN (only shown when hosting) ══ -->
+<div id="login-screen" class="screen">
   <div class="login-card">
-    <div class="login-logo">⚡ QuizBlast</div>
-    <div class="login-sub">Sign in to host your quizzes</div>
+    <div class="login-logo">🎮 Host Login</div>
+    <div class="login-sub">Sign in to host a game</div>
     <div class="login-form">
       <input class="inp" id="loginUser" placeholder="Login ID" autocomplete="username" />
       <div class="pwd-wrap">
@@ -346,8 +356,9 @@ input[type=file].hf{display:none;}
         <button class="pwd-eye" onclick="togglePwd()" id="pwdEye">👁️</button>
       </div>
       <div class="login-err" id="loginErr">Incorrect login ID or password. Please try again.</div>
-      <button class="btn btn-red btn-full" onclick="doLogin()">Sign In →</button>
+      <button class="btn btn-red btn-full" onclick="doLogin()">Sign In & Host →</button>
       <div class="forgot-link" onclick="showResetModal()">Forgot password?</div>
+      <button class="btn btn-ghost btn-full" onclick="showScreen('home')">← Back</button>
     </div>
   </div>
 </div>
@@ -367,17 +378,6 @@ input[type=file].hf{display:none;}
       <button class="btn btn-ghost btn-sm" onclick="closeResetModal()">Cancel</button>
     </div>
   </div>
-</div>
-
-<!-- ══ HOME ══ -->
-<div id="home" class="screen">
-  <div class="home-logo">⚡ QuizBlast</div>
-  <div class="home-sub">Multiplayer quiz — real-time, any device!</div>
-  <div class="home-btns">
-    <button class="btn btn-red btn-full" onclick="showHostSetup()">🎮 Host a Game</button>
-    <button class="btn btn-blue btn-full" onclick="showJoinScreen()">🔑 Join with Code</button>
-  </div>
-  <div class="home-logout" onclick="doLogout()">🚪 Sign out</div>
 </div>
 
 <!-- ══ HOST SETUP ══ -->
@@ -666,6 +666,13 @@ let currentTags=[],activeTagFilter='All';
 // ═══════════════════════════════════════
 //  LOGIN
 // ═══════════════════════════════════════
+function showHostLogin(){
+  document.getElementById('loginUser').value='';
+  document.getElementById('loginPass').value='';
+  document.getElementById('loginErr').style.display='none';
+  showScreen('login-screen');
+}
+
 function doLogin(){
   const u=document.getElementById('loginUser').value.trim();
   const p=document.getElementById('loginPass').value;
@@ -673,7 +680,7 @@ function doLogin(){
   if(u===VALID_USER&&p===VALID_PASS){
     sessionStorage.setItem('qb:auth','1');
     err.style.display='none';
-    showScreen('home');
+    showHostSetup();
   } else {
     err.style.display='block';
     document.getElementById('loginPass').value='';
@@ -683,9 +690,7 @@ function doLogin(){
 
 function doLogout(){
   sessionStorage.removeItem('qb:auth');
-  document.getElementById('loginUser').value='';
-  document.getElementById('loginPass').value='';
-  showScreen('login-screen');
+  showScreen('home');
 }
 
 function togglePwd(){
@@ -1248,8 +1253,7 @@ document.getElementById('newQ').addEventListener('keydown',e=>{if(e.key==='Enter
 // ═══════════════════════════════════════
 window.addEventListener('load',function(){
   initFirebase();
-  if(sessionStorage.getItem('qb:auth')==='1')showScreen('home');
-  else showScreen('login-screen');
+  showScreen('home');
 });
 </script>
 </body>
