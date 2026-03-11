@@ -106,6 +106,11 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 /* Add question form */
 .aq-form{background:var(--card);border-radius:17px;padding:20px;border:1px solid var(--border);}
 .aq-form h3{font-family:'Futura','Futura PT','Century Gothic','Jost',sans-serif;font-size:1.1rem;color:var(--y);margin-bottom:14px;}
+/* Question type buttons */
+.qtype-btn{padding:8px 16px;border-radius:10px;border:2px solid var(--border);background:transparent;color:var(--muted);font-family:'Futura','Futura PT','Century Gothic','Jost',sans-serif;font-weight:800;font-size:.85rem;cursor:pointer;transition:all .2s;}
+.qtype-btn:hover{border-color:var(--y);color:var(--y);}
+.qtype-btn.on{background:var(--y);border-color:var(--y);color:#080816;}
+
 input[type=file].hf{display:none;}
 
 /* Image upload widget */
@@ -423,10 +428,21 @@ input[type=file].hf{display:none;}
     <div class="aq-form">
       <h3>➕ Add Question</h3>
 
+      <!-- Question type picker -->
+      <div style="margin-bottom:14px;">
+        <div class="section-lbl" style="margin-bottom:7px;">Question Type</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="qtype-btn on" id="qt-mc4" onclick="setQType('mc4',this)">📋 4 Options</button>
+          <button class="qtype-btn" id="qt-mc3" onclick="setQType('mc3',this)">📋 3 Options</button>
+          <button class="qtype-btn" id="qt-mc2" onclick="setQType('mc2',this)">📋 2 Options</button>
+          <button class="qtype-btn" id="qt-tf" onclick="setQType('tf',this)">✅ True / False</button>
+        </div>
+      </div>
+
       <!-- Question text -->
       <div style="margin-bottom:9px;"><input class="inp" id="newQ" placeholder="Type your question…" /></div>
 
-      <!-- Question image (optional) -->
+      <!-- Question image -->
       <div class="img-row" style="margin-bottom:12px;">
         <button class="img-pick-btn" onclick="document.getElementById('qImgFile').click()">🖼️ Add image to question <span style="font-size:.7rem;opacity:.6;">(optional)</span></button>
         <input type="file" id="qImgFile" class="hf" accept="image/*" onchange="previewImg('qImgFile','qImgThumb','qImgClr')" />
@@ -434,35 +450,35 @@ input[type=file].hf{display:none;}
         <button id="qImgClr" class="img-clr" onclick="clearImg('qImgFile','qImgThumb','qImgClr')">✕ Remove</button>
       </div>
 
-      <!-- Answers with optional images -->
-      <div class="ans-grid">
+      <!-- Answers (shown/hidden dynamically) -->
+      <div class="ans-grid" id="ansGrid">
         <div class="ans-block" id="ab0">
-          <div class="ans-block-top"><div class="ans-badge" style="background:#c9184a;color:#fff;">A</div><input id="a0" placeholder="Answer A" /></div>
-          <div class="ans-img-row">
+          <div class="ans-block-top"><div class="ans-badge" id="abadge0" style="background:#c9184a;color:#fff;">A</div><input id="a0" placeholder="Answer A" /></div>
+          <div class="ans-img-row" id="aImgRow0">
             <button class="ans-img-btn" onclick="document.getElementById('aImg0').click()">🖼️ Image</button>
             <input type="file" id="aImg0" class="hf" accept="image/*" onchange="previewImg('aImg0','aImgT0','aImgC0')" />
             <img id="aImgT0" class="ans-img-thumb" /><button id="aImgC0" class="ans-img-clr" onclick="clearImg('aImg0','aImgT0','aImgC0')">✕</button>
           </div>
         </div>
         <div class="ans-block" id="ab1">
-          <div class="ans-block-top"><div class="ans-badge" style="background:#1a5ccc;color:#fff;">B</div><input id="a1" placeholder="Answer B" /></div>
-          <div class="ans-img-row">
+          <div class="ans-block-top"><div class="ans-badge" id="abadge1" style="background:#1a5ccc;color:#fff;">B</div><input id="a1" placeholder="Answer B" /></div>
+          <div class="ans-img-row" id="aImgRow1">
             <button class="ans-img-btn" onclick="document.getElementById('aImg1').click()">🖼️ Image</button>
             <input type="file" id="aImg1" class="hf" accept="image/*" onchange="previewImg('aImg1','aImgT1','aImgC1')" />
             <img id="aImgT1" class="ans-img-thumb" /><button id="aImgC1" class="ans-img-clr" onclick="clearImg('aImg1','aImgT1','aImgC1')">✕</button>
           </div>
         </div>
         <div class="ans-block" id="ab2">
-          <div class="ans-block-top"><div class="ans-badge" style="background:#d4631a;color:#fff;">C</div><input id="a2" placeholder="Answer C" /></div>
-          <div class="ans-img-row">
+          <div class="ans-block-top"><div class="ans-badge" id="abadge2" style="background:#d4631a;color:#fff;">C</div><input id="a2" placeholder="Answer C" /></div>
+          <div class="ans-img-row" id="aImgRow2">
             <button class="ans-img-btn" onclick="document.getElementById('aImg2').click()">🖼️ Image</button>
             <input type="file" id="aImg2" class="hf" accept="image/*" onchange="previewImg('aImg2','aImgT2','aImgC2')" />
             <img id="aImgT2" class="ans-img-thumb" /><button id="aImgC2" class="ans-img-clr" onclick="clearImg('aImg2','aImgT2','aImgC2')">✕</button>
           </div>
         </div>
         <div class="ans-block" id="ab3">
-          <div class="ans-block-top"><div class="ans-badge" style="background:#1a6b50;color:#fff;">D</div><input id="a3" placeholder="Answer D" /></div>
-          <div class="ans-img-row">
+          <div class="ans-block-top"><div class="ans-badge" id="abadge3" style="background:#1a6b50;color:#fff;">D</div><input id="a3" placeholder="Answer D" /></div>
+          <div class="ans-img-row" id="aImgRow3">
             <button class="ans-img-btn" onclick="document.getElementById('aImg3').click()">🖼️ Image</button>
             <input type="file" id="aImg3" class="hf" accept="image/*" onchange="previewImg('aImg3','aImgT3','aImgC3')" />
             <img id="aImgT3" class="ans-img-thumb" /><button id="aImgC3" class="ans-img-clr" onclick="clearImg('aImg3','aImgT3','aImgC3')">✕</button>
@@ -782,8 +798,65 @@ function listenAnswers(qi,cb){if(answersListener)aRef(qi-1).off('value',answersL
 function stopListenAnswers(qi){if(answersListener){aRef(qi).off('value',answersListener);answersListener=null;}}
 
 // ═══════════════════════════════════════
-//  HOST SETUP
+//  QUESTION TYPE SWITCHER
 // ═══════════════════════════════════════
+let currentQType = 'mc4'; // mc4, mc3, mc2, tf
+const ANS_COLORS = ['#c9184a','#1a5ccc','#d4631a','#1a6b50'];
+const ANS_LABELS_MC = ['A','B','C','D'];
+
+function setQType(type, btn) {
+  currentQType = type;
+  document.querySelectorAll('.qtype-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+
+  const isTF = type === 'tf';
+  const count = isTF ? 2 : parseInt(type.replace('mc',''));
+
+  // Show/hide answer blocks
+  [0,1,2,3].forEach(i => {
+    const block = document.getElementById('ab'+i);
+    block.style.display = i < count ? '' : 'none';
+  });
+
+  // Set True/False labels or restore MC labels
+  if (isTF) {
+    document.getElementById('a0').value = 'True';
+    document.getElementById('a0').readOnly = true;
+    document.getElementById('a1').value = 'False';
+    document.getElementById('a1').readOnly = true;
+    document.getElementById('abadge0').textContent = '✅';
+    document.getElementById('abadge1').textContent = '❌';
+    // Hide image rows for T/F
+    document.getElementById('aImgRow0').style.display = 'none';
+    document.getElementById('aImgRow1').style.display = 'none';
+  } else {
+    [0,1,2,3].forEach(i => {
+      const inp = document.getElementById('a'+i);
+      if (inp.readOnly) { inp.value = ''; inp.readOnly = false; }
+      inp.placeholder = 'Answer ' + ANS_LABELS_MC[i];
+      document.getElementById('abadge'+i).textContent = ANS_LABELS_MC[i];
+      document.getElementById('aImgRow'+i).style.display = '';
+    });
+  }
+
+  // Update the correct answer dropdown
+  const sel = document.getElementById('corAns');
+  sel.innerHTML = '<option value="">✅ Which answer is correct?</option>';
+  if (isTF) {
+    sel.innerHTML += '<option value="0">True is correct</option>';
+    sel.innerHTML += '<option value="1">False is correct</option>';
+  } else {
+    ['A','B','C','D'].slice(0, count).forEach((lbl, i) => {
+      sel.innerHTML += `<option value="${i}">${lbl} is correct</option>`;
+    });
+  }
+
+  // Update grid layout
+  const grid = document.getElementById('ansGrid');
+  grid.style.gridTemplateColumns = count === 1 ? '1fr' : '1fr 1fr';
+
+  hlCorrect();
+}
 async function showHostSetup(){
   role='host';roomCode=randCode();
   document.getElementById('displayCode').textContent=roomCode;
@@ -810,9 +883,10 @@ function renderHostQuestions(){
   if(!localQuestions.length){list.innerHTML='<div class="empty-box">No questions yet — add some below, or load from Library!</div>';return;}
   list.innerHTML='';
   localQuestions.forEach((q,i)=>{
+    const typeLbl = q.qtype==='tf'?'T/F': q.qtype==='mc2'?'2 opt': q.qtype==='mc3'?'3 opt':'4 opt';
     const r=document.createElement('div');r.className='q-row';
     r.innerHTML=`<div class="q-idx">${i+1}</div>${q.qImg?`<img class="q-thumb" src="${q.qImg}"/>`:''}
-      <div style="flex:1"><div class="q-txt">${esc(q.q)}</div>
+      <div style="flex:1"><div class="q-txt">${esc(q.q)} <span style="font-size:.7rem;padding:2px 7px;border-radius:6px;background:rgba(255,209,102,.12);color:var(--y);font-weight:800;">${typeLbl}</span></div>
       <div class="q-meta">${q.answers.map((a,j)=>j===q.correct?`<span class="q-cor">✓${esc(a)}</span>`:esc(a)).join(' · ')} · ${q.time}s · ${q.points}pts</div></div>
       <button class="q-del-btn" onclick="delQ(${i})">✕</button>`;
     list.appendChild(r);
@@ -826,19 +900,23 @@ function hlCorrect(){
 
 function addQuestion(){
   const q=document.getElementById('newQ').value.trim();
-  const answers=[0,1,2,3].map(i=>document.getElementById('a'+i).value.trim());
+  const isTF = currentQType === 'tf';
+  const count = isTF ? 2 : parseInt(currentQType.replace('mc',''));
+  const answers=[0,1,2,3].slice(0,count).map(i=>document.getElementById('a'+i).value.trim());
   const cor=document.getElementById('corAns').value;
   const time=parseInt(document.getElementById('qTimeSel').value);
   const points=parseInt(document.getElementById('qPtsSel').value);
   if(!q){toast('Enter a question!','err');return;}
-  if(answers.some(a=>!a)){toast('Fill in all 4 answers!','err');return;}
+  if(answers.some(a=>!a)){toast('Fill in all answer fields!','err');return;}
   if(cor===''){toast('Pick the correct answer!','err');return;}
   const qImg=getImg('qImgThumb');
-  const ansImgs=[0,1,2,3].map(i=>getImg('aImgT'+i));
-  localQuestions.push({q,answers,correct:parseInt(cor),time,points,qImg,ansImgs});
+  const ansImgs = isTF ? [null,null,null,null] : [0,1,2,3].slice(0,count).map(i=>getImg('aImgT'+i));
+  localQuestions.push({q,answers,correct:parseInt(cor),time,points,qImg,ansImgs,qtype:currentQType});
   // clear
   document.getElementById('newQ').value='';
-  [0,1,2,3].forEach(i=>{document.getElementById('a'+i).value='';clearImg('aImg'+i,'aImgT'+i,'aImgC'+i);});
+  if(!isTF){
+    [0,1,2,3].forEach(i=>{document.getElementById('a'+i).value='';clearImg('aImg'+i,'aImgT'+i,'aImgC'+i);});
+  }
   clearImg('qImgFile','qImgThumb','qImgClr');
   document.getElementById('corAns').value='';hlCorrect();
   renderHostQuestions();toast('Question added! ✓');
@@ -938,6 +1016,8 @@ async function hostShowQuestion(room){
   const qi=document.getElementById('hQImg');
   if(q.qImg){qi.src=q.qImg;qi.style.display='block';}else qi.style.display='none';
   const ad=document.getElementById('hAnsDsp');ad.innerHTML='';
+  // Use only as many columns as answers
+  ad.style.gridTemplateColumns = q.answers.length <= 2 ? '1fr 1fr' : '1fr 1fr';
   q.answers.forEach((a,i)=>{
     const img=q.ansImgs&&q.ansImgs[i];
     ad.innerHTML+=`<div class="ans-card ${AC[i]}"><div class="ans-card-hd"><div class="ans-ico">${AICO[i]}</div>${esc(a)}</div>${img?`<img class="ans-card-img" src="${img}"/>`:''}` +'</div>';
@@ -1006,6 +1086,8 @@ function playerShowQuestion(room){
   document.getElementById('pAnsweredMsg').innerHTML='';
   document.getElementById('pWaitMsg').textContent='';
   const ab=document.getElementById('pAnsBtns');ab.innerHTML='';
+  // For 2-answer questions (T/F or 2 options), use full-width single column
+  ab.style.gridTemplateColumns = q.answers.length <= 2 ? '1fr' : '1fr 1fr';
   q.answers.forEach((a,i)=>{
     const btn=document.createElement('button');btn.className=`ans-btn ${AB[i]}`;
     const img=q.ansImgs&&q.ansImgs[i];
