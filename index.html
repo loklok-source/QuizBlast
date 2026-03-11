@@ -136,6 +136,22 @@ input[type=file].hf{display:none;}
 
 .cor-sel{width:100%;padding:10px 13px;border-radius:10px;border:2px solid var(--border);background:var(--card2);color:var(--text);font-family:'Futura','Futura PT','Century Gothic','Jost',sans-serif;font-weight:700;font-size:.86rem;outline:none;cursor:pointer;margin-bottom:10px;}
 .cor-sel:focus{border-color:var(--g);}
+.explanation-wrap{margin-bottom:10px;}
+.explanation-wrap textarea{width:100%;padding:11px 14px;border-radius:10px;border:2px solid var(--border);background:var(--card2);color:var(--text);font-family:'Futura','Futura PT','Century Gothic','Jost',sans-serif;font-weight:600;font-size:.88rem;outline:none;resize:vertical;min-height:72px;transition:border-color .2s;line-height:1.6;}
+.explanation-wrap textarea:focus{border-color:var(--b);}
+.explanation-wrap textarea::placeholder{color:var(--muted);}
+.explanation-lbl{font-size:.7rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:5px;display:flex;align-items:center;gap:6px;}
+.opt-badge{padding:2px 8px;border-radius:6px;background:rgba(58,134,255,.1);border:1px solid rgba(58,134,255,.2);color:var(--b);font-size:.65rem;font-weight:800;}
+/* Explanation shown after reveal */
+.explain-box{background:rgba(58,134,255,.07);border:1px solid rgba(58,134,255,.2);border-radius:14px;padding:14px 18px;margin:10px 14px 6px;max-width:660px;margin-left:auto;margin-right:auto;}
+.explain-box-host{margin:8px auto 6px;max-width:660px;padding:0 14px;}
+.explain-inner{background:rgba(58,134,255,.07);border:1px solid rgba(58,134,255,.2);border-radius:14px;padding:14px 18px;}
+.explain-title{font-size:.7rem;font-weight:800;color:var(--b);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.explain-text{font-size:1.05rem;font-weight:700;color:var(--text);line-height:1.7;}
+/* Round results explanation */
+.rr-explain{background:rgba(58,134,255,.07);border:1px solid rgba(58,134,255,.2);border-radius:13px;padding:14px 18px;margin-bottom:16px;animation:pop .4s cubic-bezier(.34,1.2,.64,1);}
+.rr-explain-lbl{font-size:.68rem;font-weight:800;color:var(--b);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:5px;}
+.rr-explain-txt{font-size:1rem;font-weight:700;color:var(--text);line-height:1.7;}
 .form-row2{display:flex;gap:8px;flex-wrap:wrap;}
 .form-row2 select{flex:1;min-width:110px;padding:10px 13px;border-radius:10px;border:2px solid var(--border);background:var(--card2);color:var(--text);font-family:'Futura','Futura PT','Century Gothic','Jost',sans-serif;font-weight:700;font-size:.86rem;outline:none;}
 .form-row2 select option{background:#1a1a35;}
@@ -491,6 +507,13 @@ input[type=file].hf{display:none;}
         <option value="0">A is correct</option><option value="1">B is correct</option>
         <option value="2">C is correct</option><option value="3">D is correct</option>
       </select>
+
+      <!-- Optional explanation -->
+      <div class="explanation-wrap">
+        <div class="explanation-lbl">💡 Explanation <span class="opt-badge">Optional</span></div>
+        <textarea id="newExplanation" placeholder="Add an explanation that appears after the answer is revealed… (e.g. 'The correct answer is True because photosynthesis converts sunlight into glucose.')"></textarea>
+      </div>
+
       <div class="form-row2">
         <select id="qTimeSel"><option value="10">10s</option><option value="15">15s</option><option value="20" selected>20s</option><option value="30">30s</option><option value="45">45s</option><option value="60">60s</option></select>
         <select id="qPtsSel"><option value="100">100 pts</option><option value="200" selected>200 pts</option><option value="500">500 pts</option><option value="1000">1000 pts</option></select>
@@ -581,6 +604,12 @@ input[type=file].hf{display:none;}
   <div class="reveal-wrap">
     <button class="btn btn-red btn-sm" id="revealBtn" onclick="hostReveal()" style="display:none;">Reveal Answers ⚡</button>
   </div>
+  <div class="explain-box-host" id="hExplainBox" style="display:none;">
+    <div class="explain-inner">
+      <div class="explain-title">💡 Explanation</div>
+      <div class="explain-text" id="hExplainText"></div>
+    </div>
+  </div>
 </div>
 
 <!-- ══ Q PLAYER ══ -->
@@ -600,6 +629,10 @@ input[type=file].hf{display:none;}
   </div>
   <div class="ans-btns" id="pAnsBtns"></div>
   <div id="pAnsweredMsg"></div>
+  <div class="explain-box" id="pExplainBox" style="display:none;">
+    <div class="explain-title">💡 Explanation</div>
+    <div class="explain-text" id="pExplainText"></div>
+  </div>
   <div class="wait-msg" id="pWaitMsg"></div>
 </div>
 
@@ -900,6 +933,7 @@ function hlCorrect(){
 
 function addQuestion(){
   const q=document.getElementById('newQ').value.trim();
+  const explanation=document.getElementById('newExplanation').value.trim();
   const isTF = currentQType === 'tf';
   const count = isTF ? 2 : parseInt(currentQType.replace('mc',''));
   const answers=[0,1,2,3].slice(0,count).map(i=>document.getElementById('a'+i).value.trim());
@@ -911,9 +945,10 @@ function addQuestion(){
   if(cor===''){toast('Pick the correct answer!','err');return;}
   const qImg=getImg('qImgThumb');
   const ansImgs = isTF ? [null,null,null,null] : [0,1,2,3].slice(0,count).map(i=>getImg('aImgT'+i));
-  localQuestions.push({q,answers,correct:parseInt(cor),time,points,qImg,ansImgs,qtype:currentQType});
+  localQuestions.push({q,answers,correct:parseInt(cor),time,points,qImg,ansImgs,qtype:currentQType,explanation});
   // clear
   document.getElementById('newQ').value='';
+  document.getElementById('newExplanation').value='';
   if(!isTF){
     [0,1,2,3].forEach(i=>{document.getElementById('a'+i).value='';clearImg('aImg'+i,'aImgT'+i,'aImgC'+i);});
   }
@@ -1023,6 +1058,7 @@ async function hostShowQuestion(room){
     ad.innerHTML+=`<div class="ans-card ${AC[i]}"><div class="ans-card-hd"><div class="ans-ico">${AICO[i]}</div>${esc(a)}</div>${img?`<img class="ans-card-img" src="${img}"/>`:''}` +'</div>';
   });
   document.getElementById('revealBtn').style.display='none';
+  document.getElementById('hExplainBox').style.display='none';
   renderPStatus(room.players||[],'');
   startHostTimer(q.time);
   showScreen('q-host');
@@ -1059,6 +1095,11 @@ async function hostReveal(){
   const ao={};ans.forEach(a=>{ao[a.pid]=a;});
   await db.ref('rooms/'+roomCode+'/answers/'+room.qIndex).set(ao);
   document.querySelectorAll('.ans-card').forEach((c,i)=>{c.classList.add(i===q.correct?'glow':'dim');});
+  // Show explanation on host screen if present
+  if(q.explanation){
+    document.getElementById('hExplainText').textContent=q.explanation;
+    document.getElementById('hExplainBox').style.display='block';
+  }
   await updateRoom({scores,status:'roundResults',version:(room.version||0)+1});
   stopListenAnswers(room.qIndex);
   const ur=await getRoom();const fa=await getAnswers(room.qIndex);
@@ -1084,6 +1125,7 @@ function playerShowQuestion(room){
   const pi=document.getElementById('pQImg');
   if(q.qImg){pi.src=q.qImg;pi.style.display='block';}else pi.style.display='none';
   document.getElementById('pAnsweredMsg').innerHTML='';
+  document.getElementById('pExplainBox').style.display='none';
   document.getElementById('pWaitMsg').textContent='';
   const ab=document.getElementById('pAnsBtns');ab.innerHTML='';
   // For 2-answer questions (T/F or 2 options), use full-width single column
@@ -1142,6 +1184,18 @@ function showRoundResults(room,answers){
     row.innerHTML=`<div class="rr-pos">${a.correct?(medals[rank]||(rank+1)):'✗'}</div><div class="rr-av" style="background:${p.color}22;border:2px solid ${p.color}">${p.emoji}</div><div class="rr-info"><div class="rr-name">${esc(p.name)}</div><div class="rr-detail">${a.ansIdx===-1?'No answer':esc(q.answers[a.ansIdx])}${a.correct?`<span class="speed-tag">⚡ ${a.time.toFixed(1)}s</span>`:''}</div></div><div class="rr-pts ${a.correct?'pos':'neg'}">${a.correct?'+'+a.points:'0'}</div>`;
     list.appendChild(row);
   });
+
+  // Explanation block
+  const rrWrap = document.getElementById('rrList');
+  const existingExplain = document.getElementById('rrExplainBox');
+  if(existingExplain) existingExplain.remove();
+  if(q.explanation){
+    const eb=document.createElement('div');
+    eb.id='rrExplainBox';eb.className='rr-explain';
+    eb.innerHTML=`<div class="rr-explain-lbl">💡 Explanation</div><div class="rr-explain-txt">${esc(q.explanation)}</div>`;
+    rrWrap.after(eb);
+  }
+
   const lbs=[...(room.players||[])].sort((a,b)=>(room.scores[b.id]||0)-(room.scores[a.id]||0));
   const lbr=document.getElementById('lbMiniRows');lbr.innerHTML='';
   lbs.forEach((p,i)=>{const g=i===0?'g1':i===1?'g2':i===2?'g3':'';lbr.innerHTML+=`<div class="lb-row"><div class="lb-rk ${g}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</div><div class="lb-av2" style="background:${p.color}22">${p.emoji}</div><div class="lb-nm">${esc(p.name)}</div><div class="lb-sc">${(room.scores[p.id]||0).toLocaleString()}</div></div>`;});
