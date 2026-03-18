@@ -102,6 +102,12 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .q-thumb{width:38px;height:38px;border-radius:7px;object-fit:cover;flex-shrink:0;border:1px solid var(--border);}
 .q-del-btn{padding:5px 11px;border-radius:8px;background:rgba(255,77,109,.08);border:1px solid rgba(255,77,109,.15);color:var(--r);font-family:'Futura','Futura PT','Century Gothic','Jost',sans-serif;font-weight:700;font-size:.76rem;cursor:pointer;transition:all .2s;flex-shrink:0;}
 .q-del-btn:hover{background:var(--r);color:#fff;}
+.q-edit-btn{padding:5px 11px;border-radius:8px;background:rgba(255,209,102,.08);border:1px solid rgba(255,209,102,.2);color:var(--y);font-family:'Futura','Futura PT','Century Gothic','Jost',sans-serif;font-weight:700;font-size:.76rem;cursor:pointer;transition:all .2s;flex-shrink:0;}
+.q-edit-btn:hover{background:var(--y);color:#080816;}
+.q-row.editing{border-color:rgba(255,209,102,.5);background:rgba(255,209,102,.04);}
+.aq-edit-mode-banner{background:rgba(255,209,102,.08);border:1px solid rgba(255,209,102,.22);border-radius:11px;padding:10px 15px;margin-bottom:13px;display:none;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.aq-edit-mode-banner.show{display:flex;}
+.aq-edit-mode-banner span{font-weight:800;color:var(--y);font-size:.9rem;}
 
 /* Add question form */
 .aq-form{background:var(--card);border-radius:17px;padding:20px;border:1px solid var(--border);}
@@ -110,6 +116,13 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .qtype-btn{padding:8px 16px;border-radius:10px;border:2px solid var(--border);background:transparent;color:var(--muted);font-family:'Futura','Futura PT','Century Gothic','Jost',sans-serif;font-weight:800;font-size:.85rem;cursor:pointer;transition:all .2s;}
 .qtype-btn:hover{border-color:var(--y);color:var(--y);}
 .qtype-btn.on{background:var(--y);border-color:var(--y);color:#080816;}
+/* Type Answer player input */
+.ta-input-wrap{padding:0 14px;max-width:500px;margin:0 auto 14px;width:100%;}
+.ta-inp{width:100%;padding:18px 20px;border-radius:16px;border:3px solid var(--border);background:var(--card2);color:var(--text);font-family:'Futura','Futura PT','Century Gothic','Jost',sans-serif;font-weight:800;font-size:1.4rem;outline:none;text-align:center;letter-spacing:.05em;transition:border-color .2s;}
+.ta-inp:focus{border-color:var(--b);}
+.ta-inp:disabled{opacity:.5;cursor:default;}
+.ta-hint{text-align:center;font-size:.85rem;color:var(--muted);font-weight:700;margin-top:8px;}
+.ta-submit-btn{display:block;margin:10px auto 0;}
 
 input[type=file].hf{display:none;}
 
@@ -294,10 +307,23 @@ input[type=file].hf{display:none;}
 .wt-sub{color:var(--muted);font-weight:700;margin-bottom:28px;font-size:1.1rem;}
 
 /* ROUND RESULTS */
-#round-res{justify-content:flex-start;overflow-y:auto;}
-.rr-wrap{width:100%;max-width:540px;padding-bottom:24px;}
+#round-res{justify-content:flex-start;overflow-y:auto;padding:0;}
+.rr-topbar{width:100%;background:var(--card);border-bottom:1px solid var(--border);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;position:sticky;top:0;z-index:10;}
+.rr-top3{display:flex;align-items:flex-end;gap:8px;}
+.rr-top3-item{display:flex;flex-direction:column;align-items:center;gap:2px;}
+.rr-top3-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;border:2px solid rgba(255,255,255,.14);}
+.rr-top3-av.rank1{width:46px;height:46px;font-size:1.2rem;}
+.rr-top3-nm{font-size:.62rem;font-weight:800;color:var(--muted);max-width:46px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.rr-top3-sc{font-family:'Futura','Futura PT','Century Gothic','Jost',sans-serif;font-size:.75rem;color:var(--y);font-weight:800;}
+.rr-wrap{width:100%;max-width:540px;padding:16px 16px 24px;margin:0 auto;}
 .rr-q{font-size:clamp(1.2rem,4vw,1.7rem);font-weight:800;margin-bottom:9px;line-height:1.4;text-align:center;}
 .cor-badge{display:inline-flex;align-items:center;gap:7px;padding:7px 18px;border-radius:26px;background:rgba(6,214,160,.1);border:1px solid rgba(6,214,160,.22);color:var(--g);font-weight:800;font-size:1.05rem;margin-bottom:18px;}
+/* Word cloud */
+.word-cloud-wrap{background:var(--card);border-radius:16px;padding:18px;border:1px solid var(--border);margin-bottom:18px;}
+.word-cloud-title{font-size:.7rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:14px;}
+.word-cloud{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;min-height:60px;}
+.wc-word{border-radius:8px;padding:4px 12px;font-weight:800;line-height:1.3;transition:transform .2s;}
+.wc-word:hover{transform:scale(1.08);}
 .rr-list{display:flex;flex-direction:column;gap:8px;margin-bottom:18px;}
 .rr-row{background:var(--card);border-radius:13px;padding:12px 15px;display:flex;align-items:center;gap:11px;border:1px solid var(--border);animation:sr .3s both cubic-bezier(.34,1.2,.64,1);}
 @keyframes sr{from{transform:translateX(40px);opacity:0}to{transform:translateX(0);opacity:1}}
@@ -391,7 +417,7 @@ input[type=file].hf{display:none;}
     <p>Enter your registered email address and we'll send your login details.</p>
     <input class="inp" id="resetEmailInp" placeholder="Your email address" />
     <div class="modal-success" id="resetSuccess">
-      ✅ Password reset sent to <b>loklimtan@gmail.com</b><br>
+      ✅ Password reset sent to <b><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d8b4b7b3b4b1b5acb9b698bfb5b9b1b4f6bbb7b5">[email&#160;protected]</a></b><br>
       Check your inbox (and spam folder)!
     </div>
     <div class="modal-btns">
@@ -442,7 +468,13 @@ input[type=file].hf{display:none;}
     <div id="hostQList" class="q-list"></div>
 
     <div class="aq-form">
-      <h3>➕ Add Question</h3>
+      <!-- Edit mode banner -->
+      <div class="aq-edit-mode-banner" id="aqEditBanner">
+        <span>✏️ Editing Question <span id="aqEditNum"></span></span>
+        <button class="btn btn-ghost btn-xs" onclick="cancelEditQ()">✕ Cancel Edit</button>
+      </div>
+
+      <h3 id="aqFormTitle">➕ Add Question</h3>
 
       <!-- Question type picker -->
       <div style="margin-bottom:14px;">
@@ -452,6 +484,7 @@ input[type=file].hf{display:none;}
           <button class="qtype-btn" id="qt-mc3" onclick="setQType('mc3',this)">📋 3 Options</button>
           <button class="qtype-btn" id="qt-mc2" onclick="setQType('mc2',this)">📋 2 Options</button>
           <button class="qtype-btn" id="qt-tf" onclick="setQType('tf',this)">✅ True / False</button>
+          <button class="qtype-btn" id="qt-ta" onclick="setQType('ta',this)">⌨️ Type Answer</button>
         </div>
       </div>
 
@@ -517,7 +550,7 @@ input[type=file].hf{display:none;}
       <div class="form-row2">
         <select id="qTimeSel"><option value="10">10s</option><option value="15">15s</option><option value="20" selected>20s</option><option value="30">30s</option><option value="45">45s</option><option value="60">60s</option></select>
         <select id="qPtsSel"><option value="100">100 pts</option><option value="200" selected>200 pts</option><option value="500">500 pts</option><option value="1000">1000 pts</option></select>
-        <button class="btn btn-teal btn-sm" onclick="addQuestion()">Add ✓</button>
+        <button class="btn btn-teal btn-sm" id="aqSubmitBtn" onclick="addQuestion()">Add ✓</button>
       </div>
     </div>
   </div>
@@ -549,7 +582,13 @@ input[type=file].hf{display:none;}
   </div>
 
   <div class="hs-footer">
-    <div class="status-pill">👥 <span id="footerPC">0</span> players · ❓ <span id="footerQC">0</span> questions</div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div class="status-pill">👥 <span id="footerPC">0</span> players · ❓ <span id="footerQC">0</span> questions</div>
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:0 4px;">
+        <input type="checkbox" id="randomiseToggle" style="width:16px;height:16px;accent-color:var(--b);cursor:pointer;" />
+        <span style="font-size:.8rem;font-weight:800;color:var(--muted);">🔀 Randomise question order</span>
+      </label>
+    </div>
     <div style="display:flex;gap:9px;flex-wrap:wrap;">
       <button class="btn btn-ghost btn-sm" onclick="showScreen('home')">← Back</button>
       <button class="btn btn-teal btn-sm" onclick="goToLobby()">Open Lobby 🚀</button>
@@ -628,6 +667,12 @@ input[type=file].hf{display:none;}
     <img id="pQImg" class="q-img-show" style="display:none;" alt="" />
   </div>
   <div class="ans-btns" id="pAnsBtns"></div>
+  <!-- Type Answer input (shown for ta questions) -->
+  <div class="ta-input-wrap" id="pTaWrap" style="display:none;">
+    <input class="ta-inp" id="pTaInput" placeholder="Type your answer…" maxlength="100" autocomplete="off" autocorrect="off" spellcheck="false" />
+    <div class="ta-hint" id="pTaHint">Press Enter or tap Submit to answer</div>
+    <button class="btn btn-blue ta-submit-btn" id="pTaSubmitBtn" onclick="playerTASubmit()">Submit Answer →</button>
+  </div>
   <div id="pAnsweredMsg"></div>
   <div class="explain-box" id="pExplainBox" style="display:none;">
     <div class="explain-title">💡 Explanation</div>
@@ -647,14 +692,23 @@ input[type=file].hf{display:none;}
 
 <!-- ══ ROUND RESULTS ══ -->
 <div id="round-res" class="screen" style="justify-content:flex-start;">
+  <!-- Sticky top bar: Next button + top 3 -->
+  <div class="rr-topbar" id="rrTopbar">
+    <div class="rr-top3" id="rrTop3"></div>
+    <div id="rrNextWrap"></div>
+  </div>
   <div class="rr-wrap">
     <div style="text-align:center;margin-bottom:16px;">
       <div class="rr-q" id="rrQ"></div>
       <div class="cor-badge" id="rrCor"></div>
     </div>
+    <!-- Word cloud (type-answer only) -->
+    <div class="word-cloud-wrap" id="rrWordCloud" style="display:none;">
+      <div class="word-cloud-title">💬 What everyone answered</div>
+      <div class="word-cloud" id="rrCloudWords"></div>
+    </div>
     <div class="rr-list" id="rrList"></div>
-    <div class="lb-mini"><div class="lb-mini-title">🏆 Standings</div><div id="lbMiniRows"></div></div>
-    <div id="rrNextWrap" style="text-align:center;padding-bottom:20px;"></div>
+    <div class="lb-mini" style="margin-top:16px;"><div class="lb-mini-title">🏆 Standings</div><div id="lbMiniRows"></div></div>
   </div>
 </div>
 
@@ -670,7 +724,7 @@ input[type=file].hf{display:none;}
 <div class="toast" id="toast"></div>
 <div class="conf-layer" id="confLayer"></div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ═══════════════════════════════════════
 //  CONSTANTS
 // ═══════════════════════════════════════
@@ -834,6 +888,7 @@ function stopListenAnswers(qi){if(answersListener){aRef(qi).off('value',answersL
 //  QUESTION TYPE SWITCHER
 // ═══════════════════════════════════════
 let currentQType = 'mc4'; // mc4, mc3, mc2, tf
+let editingQIdx = null;   // index of question being edited, or null
 const ANS_COLORS = ['#c9184a','#1a5ccc','#d4631a','#1a6b50'];
 const ANS_LABELS_MC = ['A','B','C','D'];
 
@@ -842,27 +897,49 @@ function setQType(type, btn) {
   document.querySelectorAll('.qtype-btn').forEach(b => b.classList.remove('on'));
   btn.classList.add('on');
 
+  const isTA = type === 'ta';
   const isTF = type === 'tf';
-  const count = isTF ? 2 : parseInt(type.replace('mc',''));
+  const isMC = !isTA && !isTF;
+  const count = isTF ? 2 : isTA ? 0 : parseInt(type.replace('mc',''));
 
-  // Show/hide answer blocks
-  [0,1,2,3].forEach(i => {
-    const block = document.getElementById('ab'+i);
-    block.style.display = i < count ? '' : 'none';
-  });
+  // Show/hide answer blocks + grid
+  const grid = document.getElementById('ansGrid');
+  if(isTA){
+    // Hide all answer blocks — TA uses a single correct answer input
+    [0,1,2,3].forEach(i => document.getElementById('ab'+i).style.display='none');
+    grid.style.display='none';
+    // Show TA correct-answer field
+    let taField = document.getElementById('taCorrectWrap');
+    if(!taField){
+      taField = document.createElement('div');
+      taField.id = 'taCorrectWrap';
+      taField.style.cssText = 'margin-bottom:10px;';
+      taField.innerHTML = `<div class="explanation-lbl">✅ Accepted Answers <span class="opt-badge" style="background:rgba(6,214,160,.1);border-color:rgba(6,214,160,.2);color:var(--g);">Separate with commas</span></div>
+        <input class="inp" id="taCorrectInput" placeholder="e.g. Paris, paris, PARIS" />
+        <div style="font-size:.7rem;color:var(--muted);font-weight:700;margin-top:4px;">Case-insensitive. Add variations separated by commas.</div>`;
+      grid.after(taField);
+    }
+    taField.style.display='block';
+  } else {
+    // Hide TA field if present
+    const taField = document.getElementById('taCorrectWrap');
+    if(taField) taField.style.display='none';
+    grid.style.display='';
+    [0,1,2,3].forEach(i => {
+      const block = document.getElementById('ab'+i);
+      block.style.display = i < count ? '' : 'none';
+    });
+  }
 
   // Set True/False labels or restore MC labels
   if (isTF) {
-    document.getElementById('a0').value = 'True';
-    document.getElementById('a0').readOnly = true;
-    document.getElementById('a1').value = 'False';
-    document.getElementById('a1').readOnly = true;
+    document.getElementById('a0').value = 'True';  document.getElementById('a0').readOnly = true;
+    document.getElementById('a1').value = 'False'; document.getElementById('a1').readOnly = true;
     document.getElementById('abadge0').textContent = '✅';
     document.getElementById('abadge1').textContent = '❌';
-    // Hide image rows for T/F
     document.getElementById('aImgRow0').style.display = 'none';
     document.getElementById('aImgRow1').style.display = 'none';
-  } else {
+  } else if(isMC){
     [0,1,2,3].forEach(i => {
       const inp = document.getElementById('a'+i);
       if (inp.readOnly) { inp.value = ''; inp.readOnly = false; }
@@ -874,20 +951,22 @@ function setQType(type, btn) {
 
   // Update the correct answer dropdown
   const sel = document.getElementById('corAns');
-  sel.innerHTML = '<option value="">✅ Which answer is correct?</option>';
-  if (isTF) {
-    sel.innerHTML += '<option value="0">True is correct</option>';
-    sel.innerHTML += '<option value="1">False is correct</option>';
+  if(isTA){
+    sel.style.display = 'none';
   } else {
-    ['A','B','C','D'].slice(0, count).forEach((lbl, i) => {
-      sel.innerHTML += `<option value="${i}">${lbl} is correct</option>`;
-    });
+    sel.style.display = '';
+    sel.innerHTML = '<option value="">✅ Which answer is correct?</option>';
+    if (isTF) {
+      sel.innerHTML += '<option value="0">True is correct</option>';
+      sel.innerHTML += '<option value="1">False is correct</option>';
+    } else {
+      ['A','B','C','D'].slice(0, count).forEach((lbl, i) => {
+        sel.innerHTML += `<option value="${i}">${lbl} is correct</option>`;
+      });
+    }
   }
 
-  // Update grid layout
-  const grid = document.getElementById('ansGrid');
-  grid.style.gridTemplateColumns = count === 1 ? '1fr' : '1fr 1fr';
-
+  grid.style.gridTemplateColumns = (count <= 2 && !isTA) ? '1fr 1fr' : '1fr 1fr';
   hlCorrect();
 }
 async function showHostSetup(){
@@ -916,12 +995,19 @@ function renderHostQuestions(){
   if(!localQuestions.length){list.innerHTML='<div class="empty-box">No questions yet — add some below, or load from Library!</div>';return;}
   list.innerHTML='';
   localQuestions.forEach((q,i)=>{
-    const typeLbl = q.qtype==='tf'?'T/F': q.qtype==='mc2'?'2 opt': q.qtype==='mc3'?'3 opt':'4 opt';
-    const r=document.createElement('div');r.className='q-row';
+    const typeLbl = q.qtype==='tf'?'T/F': q.qtype==='mc2'?'2 opt': q.qtype==='mc3'?'3 opt': q.qtype==='ta'?'Type Answer':'4 opt';
+    const metaAnswers = q.qtype==='ta' ? `<span style="color:var(--b)">✓ ${(q.correctAnswers||[]).join(' / ')}</span>` : q.answers.map((a,j)=>j===q.correct?`<span class="q-cor">✓${esc(a)}</span>`:esc(a)).join(' · ');
+    const isEditing = editingQIdx === i;
+    const r=document.createElement('div');
+    r.className='q-row'+(isEditing?' editing':'');
+    r.id='qrow-'+i;
     r.innerHTML=`<div class="q-idx">${i+1}</div>${q.qImg?`<img class="q-thumb" src="${q.qImg}"/>`:''}
       <div style="flex:1"><div class="q-txt">${esc(q.q)} <span style="font-size:.7rem;padding:2px 7px;border-radius:6px;background:rgba(255,209,102,.12);color:var(--y);font-weight:800;">${typeLbl}</span></div>
-      <div class="q-meta">${q.answers.map((a,j)=>j===q.correct?`<span class="q-cor">✓${esc(a)}</span>`:esc(a)).join(' · ')} · ${q.time}s · ${q.points}pts</div></div>
-      <button class="q-del-btn" onclick="delQ(${i})">✕</button>`;
+      <div class="q-meta">${metaAnswers} · ${q.time}s · ${q.points}pts${q.explanation?` · 💡`:''}${isEditing?' <span style="color:var(--y);font-weight:800;">← editing</span>':''}</div></div>
+      <div style="display:flex;gap:5px;flex-shrink:0;">
+        <button class="q-edit-btn" onclick="editQ(${i})">✏️ Edit</button>
+        <button class="q-del-btn" onclick="delQ(${i})">✕</button>
+      </div>`;
     list.appendChild(r);
   });
 }
@@ -931,33 +1017,147 @@ function hlCorrect(){
   [0,1,2,3].forEach(i=>{document.getElementById('ab'+i).className='ans-block'+(v!==''&&parseInt(v)===i?' right-ans':'');});
 }
 
+function editQ(i){
+  const q = localQuestions[i];
+  editingQIdx = i;
+
+  // Switch to correct question type
+  const typeMap = {tf:'tf', mc2:'mc2', mc3:'mc3', mc4:'mc4'};
+  const qt = typeMap[q.qtype] || 'mc4';
+  const qtBtn = document.getElementById('qt-'+qt);
+  if(qtBtn) setQType(qt, qtBtn);
+
+  // Fill question text
+  document.getElementById('newQ').value = q.q;
+
+  // Fill answers
+  const isTF = qt === 'tf';
+  const isTA = qt === 'ta';
+  if(!isTF && !isTA){
+    q.answers.forEach((a,j)=>{ document.getElementById('a'+j).value = a; });
+    q.answers.forEach((a,j)=>{
+      const imgData = q.ansImgs && q.ansImgs[j];
+      if(imgData){
+        const th=document.getElementById('aImgT'+j), cl=document.getElementById('aImgC'+j);
+        th.src=imgData; th.style.display='block'; cl.style.display='inline-block';
+      }
+    });
+  }
+  if(isTA){
+    // Populate TA correct answers field
+    setTimeout(()=>{
+      const taIn=document.getElementById('taCorrectInput');
+      if(taIn && q.correctAnswers) taIn.value = q.correctAnswers.join(', ');
+    }, 100);
+  }
+
+  // Restore question image
+  if(q.qImg){
+    const th=document.getElementById('qImgThumb'), cl=document.getElementById('qImgClr');
+    th.src=q.qImg; th.style.display='block'; cl.style.display='inline-block';
+  }
+
+  // Set correct answer, time, points, explanation
+  document.getElementById('corAns').value = String(q.correct);
+  hlCorrect();
+  document.getElementById('qTimeSel').value = String(q.time);
+  document.getElementById('qPtsSel').value = String(q.points);
+  document.getElementById('newExplanation').value = q.explanation || '';
+
+  // Update form UI to edit mode
+  document.getElementById('aqEditBanner').classList.add('show');
+  document.getElementById('aqEditNum').textContent = i+1;
+  document.getElementById('aqFormTitle').textContent = '✏️ Edit Question';
+  document.getElementById('aqSubmitBtn').textContent = 'Save Changes ✓';
+  document.getElementById('aqSubmitBtn').className = 'btn btn-red btn-sm';
+
+  // Highlight the row and scroll to form
+  renderHostQuestions();
+  setTimeout(()=>{
+    document.querySelector('.aq-form').scrollIntoView({behavior:'smooth', block:'start'});
+  }, 100);
+}
+
+function cancelEditQ(){
+  editingQIdx = null;
+  clearFormFields();
+  document.getElementById('aqEditBanner').classList.remove('show');
+  document.getElementById('aqFormTitle').textContent = '➕ Add Question';
+  document.getElementById('aqSubmitBtn').textContent = 'Add ✓';
+  document.getElementById('aqSubmitBtn').className = 'btn btn-teal btn-sm';
+  renderHostQuestions();
+}
+
+function clearFormFields(){
+  document.getElementById('newQ').value='';
+  document.getElementById('newExplanation').value='';
+  const taIn = document.getElementById('taCorrectInput');
+  if(taIn) taIn.value='';
+  [0,1,2,3].forEach(i=>{
+    const inp=document.getElementById('a'+i);
+    if(inp){inp.value='';inp.readOnly=false;}
+    clearImg('aImg'+i,'aImgT'+i,'aImgC'+i);
+  });
+  clearImg('qImgFile','qImgThumb','qImgClr');
+  document.getElementById('corAns').value='';
+  hlCorrect();
+}
+
 function addQuestion(){
   const q=document.getElementById('newQ').value.trim();
   const explanation=document.getElementById('newExplanation').value.trim();
+  const isTA = currentQType === 'ta';
   const isTF = currentQType === 'tf';
-  const count = isTF ? 2 : parseInt(currentQType.replace('mc',''));
-  const answers=[0,1,2,3].slice(0,count).map(i=>document.getElementById('a'+i).value.trim());
-  const cor=document.getElementById('corAns').value;
+  const isMC = !isTA && !isTF;
+  const count = isTF ? 2 : isTA ? 0 : parseInt(currentQType.replace('mc',''));
+
+  if(!q){toast('Enter a question!','err');return;}
+
+  let answers=[], correctAnswers=[], correct=0, qImg=null, ansImgs=[];
+
+  if(isTA){
+    const rawCA = (document.getElementById('taCorrectInput')||{}).value||'';
+    correctAnswers = rawCA.split(',').map(s=>s.trim().toLowerCase()).filter(Boolean);
+    if(!correctAnswers.length){toast('Enter at least one accepted answer!','err');return;}
+    answers = [];
+    qImg = getImg('qImgThumb');
+    ansImgs = [];
+  } else {
+    answers=[0,1,2,3].slice(0,count).map(i=>document.getElementById('a'+i).value.trim());
+    const cor=document.getElementById('corAns').value;
+    if(answers.some(a=>!a)){toast('Fill in all answer fields!','err');return;}
+    if(cor===''){toast('Pick the correct answer!','err');return;}
+    correct=parseInt(cor);
+    qImg=getImg('qImgThumb');
+    ansImgs=isTF?[null,null,null,null]:[0,1,2,3].slice(0,count).map(i=>getImg('aImgT'+i));
+  }
+
   const time=parseInt(document.getElementById('qTimeSel').value);
   const points=parseInt(document.getElementById('qPtsSel').value);
-  if(!q){toast('Enter a question!','err');return;}
-  if(answers.some(a=>!a)){toast('Fill in all answer fields!','err');return;}
-  if(cor===''){toast('Pick the correct answer!','err');return;}
-  const qImg=getImg('qImgThumb');
-  const ansImgs = isTF ? [null,null,null,null] : [0,1,2,3].slice(0,count).map(i=>getImg('aImgT'+i));
-  localQuestions.push({q,answers,correct:parseInt(cor),time,points,qImg,ansImgs,qtype:currentQType,explanation});
-  // clear
-  document.getElementById('newQ').value='';
-  document.getElementById('newExplanation').value='';
-  if(!isTF){
-    [0,1,2,3].forEach(i=>{document.getElementById('a'+i).value='';clearImg('aImg'+i,'aImgT'+i,'aImgC'+i);});
+  const questionData={q,answers,correct,correctAnswers,time,points,qImg,ansImgs,qtype:currentQType,explanation};
+
+  if(editingQIdx!==null){
+    localQuestions[editingQIdx]=questionData;
+    editingQIdx=null;
+    document.getElementById('aqEditBanner').classList.remove('show');
+    document.getElementById('aqFormTitle').textContent='➕ Add Question';
+    document.getElementById('aqSubmitBtn').textContent='Add ✓';
+    document.getElementById('aqSubmitBtn').className='btn btn-teal btn-sm';
+    toast('✅ Question updated!');
+  } else {
+    localQuestions.push(questionData);
+    toast('Question added! ✓');
   }
-  clearImg('qImgFile','qImgThumb','qImgClr');
-  document.getElementById('corAns').value='';hlCorrect();
-  renderHostQuestions();toast('Question added! ✓');
+  clearFormFields();
+  renderHostQuestions();
 }
 
-function delQ(i){localQuestions.splice(i,1);renderHostQuestions();}
+function delQ(i){
+  if(editingQIdx===i) cancelEditQ();
+  else if(editingQIdx!==null && editingQIdx>i) editingQIdx--;
+  localQuestions.splice(i,1);
+  renderHostQuestions();
+}
 
 function hsTab(tab,btn){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));btn.classList.add('on');
@@ -974,7 +1174,13 @@ async function goToLobby(){
   if(!localQuestions.length){toast('Add at least 1 question!','err');return;}
   stopListen();
   const scores={};players.forEach(p=>scores[p.id]=0);
-  await setRoom({code:roomCode,status:'lobby',qIndex:0,questionStartTime:0,players,questions:localQuestions,scores,answers:{},version:1});
+  // Randomise if toggled
+  let qs=[...localQuestions];
+  if(document.getElementById('randomiseToggle').checked){
+    for(let i=qs.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[qs[i],qs[j]]=[qs[j],qs[i]];}
+    toast('🔀 Questions randomised!');
+  }
+  await setRoom({code:roomCode,status:'lobby',qIndex:0,questionStartTime:0,players,questions:qs,scores,answers:{},version:1});
   document.getElementById('lobbyCode').textContent=roomCode;
   renderLobby(players);
   document.getElementById('lobbyStatusTxt').parentElement.innerHTML=`<button class="btn btn-teal" onclick="hostStartGame()">Start Game 🎮</button>`;
@@ -1051,12 +1257,17 @@ async function hostShowQuestion(room){
   const qi=document.getElementById('hQImg');
   if(q.qImg){qi.src=q.qImg;qi.style.display='block';}else qi.style.display='none';
   const ad=document.getElementById('hAnsDsp');ad.innerHTML='';
-  // Use only as many columns as answers
-  ad.style.gridTemplateColumns = q.answers.length <= 2 ? '1fr 1fr' : '1fr 1fr';
-  q.answers.forEach((a,i)=>{
-    const img=q.ansImgs&&q.ansImgs[i];
-    ad.innerHTML+=`<div class="ans-card ${AC[i]}"><div class="ans-card-hd"><div class="ans-ico">${AICO[i]}</div>${esc(a)}</div>${img?`<img class="ans-card-img" src="${img}"/>`:''}` +'</div>';
-  });
+  if(q.qtype==='ta'){
+    // Show "Type Answer" indicator for host
+    ad.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:18px;border:2px dashed rgba(58,134,255,.25);border-radius:14px;color:var(--b);font-weight:800;font-size:1rem;">⌨️ Players type their answer</div>`;
+    ad.style.gridTemplateColumns='1fr';
+  } else {
+    ad.style.gridTemplateColumns='1fr 1fr';
+    q.answers.forEach((a,i)=>{
+      const img=q.ansImgs&&q.ansImgs[i];
+      ad.innerHTML+=`<div class="ans-card ${AC[i]}"><div class="ans-card-hd"><div class="ans-ico">${AICO[i]}</div>${esc(a)}</div>${img?`<img class="ans-card-img" src="${img}"/>`:''}` +'</div>';
+    });
+  }
   document.getElementById('revealBtn').style.display='none';
   document.getElementById('hExplainBox').style.display='none';
   renderPStatus(room.players||[],'');
@@ -1087,15 +1298,48 @@ async function hostReveal(){
   stopTimer();revealShown=true;document.getElementById('revealBtn').style.display='none';
   const room=await getRoom();if(!room)return;
   const q=room.questions[room.qIndex];
+  const isTA=q.qtype==='ta';
   let ans=await getAnswers(room.qIndex);
   const pids=ans.map(a=>a.pid);
-  (room.players||[]).forEach(p=>{if(!pids.includes(p.id))ans.push({pid:p.id,ansIdx:-1,time:9999,correct:false,points:0});});
+  (room.players||[]).forEach(p=>{
+    if(!pids.includes(p.id))ans.push({pid:p.id,ansIdx:-1,typed:'',time:9999,correct:false,points:0});
+  });
   const scores={...(room.scores||{})};
-  ans=ans.map(a=>{if(a.ansIdx===q.correct){const tp=Math.max(0,(q.time-a.time)/q.time);a.points=Math.round(q.points*(.5+.5*tp));a.correct=true;scores[a.pid]=(scores[a.pid]||0)+a.points;}else{a.correct=false;a.points=0;}return a;});
+  ans=ans.map(a=>{
+    if(isTA){
+      // Check typed answer against accepted answers (case-insensitive, trimmed)
+      const typed=(a.typed||'').trim().toLowerCase();
+      const accepted=(q.correctAnswers||[]).map(s=>s.trim().toLowerCase());
+      const ok=typed.length>0&&accepted.some(ca=>typed===ca);
+      if(ok){
+        const tp=Math.max(0,(q.time-a.time)/q.time);
+        a.points=Math.round(q.points*(.5+.5*tp));
+        a.correct=true;
+        scores[a.pid]=(scores[a.pid]||0)+a.points;
+      } else {a.correct=false;a.points=0;}
+    } else {
+      if(a.ansIdx===q.correct){
+        const tp=Math.max(0,(q.time-a.time)/q.time);
+        a.points=Math.round(q.points*(.5+.5*tp));
+        a.correct=true;
+        scores[a.pid]=(scores[a.pid]||0)+a.points;
+      } else {a.correct=false;a.points=0;}
+    }
+    return a;
+  });
   const ao={};ans.forEach(a=>{ao[a.pid]=a;});
   await db.ref('rooms/'+roomCode+'/answers/'+room.qIndex).set(ao);
-  document.querySelectorAll('.ans-card').forEach((c,i)=>{c.classList.add(i===q.correct?'glow':'dim');});
-  // Show explanation on host screen if present
+  if(!isTA){
+    document.querySelectorAll('.ans-card').forEach((c,i)=>{c.classList.add(i===q.correct?'glow':'dim');});
+  } else {
+    // Show accepted answers on host screen
+    const ad=document.getElementById('hAnsDsp');
+    ad.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:14px 18px;background:rgba(6,214,160,.1);border:2px solid rgba(6,214,160,.3);border-radius:14px;">
+      <div style="font-size:.7rem;font-weight:800;color:var(--g);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px;">✅ Accepted Answers</div>
+      <div style="font-size:1.1rem;font-weight:800;color:var(--text);">${(q.correctAnswers||[]).join(' · ')}</div>
+    </div>`;
+  }
+  // Show explanation
   if(q.explanation){
     document.getElementById('hExplainText').textContent=q.explanation;
     document.getElementById('hExplainBox').style.display='block';
@@ -1119,6 +1363,7 @@ async function hostEndGame(){await updateRoom({status:'final',version:Date.now()
 function playerShowQuestion(room){
   stopTimer();
   const q=room.questions[room.qIndex];
+  const isTA=q.qtype==='ta';
   document.getElementById('pQN').textContent=room.qIndex+1;
   document.getElementById('pQT').textContent=room.questions.length;
   document.getElementById('pQText').textContent=q.q;
@@ -1127,26 +1372,47 @@ function playerShowQuestion(room){
   document.getElementById('pAnsweredMsg').innerHTML='';
   document.getElementById('pExplainBox').style.display='none';
   document.getElementById('pWaitMsg').textContent='';
-  const ab=document.getElementById('pAnsBtns');ab.innerHTML='';
-  // For 2-answer questions (T/F or 2 options), use full-width single column
-  ab.style.gridTemplateColumns = q.answers.length <= 2 ? '1fr' : '1fr 1fr';
-  q.answers.forEach((a,i)=>{
-    const btn=document.createElement('button');btn.className=`ans-btn ${AB[i]}`;
-    const img=q.ansImgs&&q.ansImgs[i];
-    btn.innerHTML=`<div class="ans-btn-hd"><div class="ans-ico">${AICO[i]}</div>${esc(a)}</div>${img?`<img class="ans-btn-img" src="${img}"/>`:''}`;
-    btn.onclick=()=>playerAnswer(i,room);ab.appendChild(btn);
-  });
+
+  const ab=document.getElementById('pAnsBtns');
+  const taWrap=document.getElementById('pTaWrap');
+  const taInp=document.getElementById('pTaInput');
+
+  if(isTA){
+    // Type Answer mode
+    ab.innerHTML='';ab.style.display='none';
+    taWrap.style.display='block';
+    taInp.value='';taInp.disabled=false;
+    document.getElementById('pTaSubmitBtn').disabled=false;
+    document.getElementById('pTaHint').textContent='Press Enter or tap Submit';
+    setTimeout(()=>taInp.focus(),200);
+  } else {
+    // MC / TF mode
+    taWrap.style.display='none';
+    ab.style.display='';
+    ab.innerHTML='';
+    ab.style.gridTemplateColumns=q.answers.length<=2?'1fr':'1fr 1fr';
+    q.answers.forEach((a,i)=>{
+      const btn=document.createElement('button');btn.className=`ans-btn ${AB[i]}`;
+      const img=q.ansImgs&&q.ansImgs[i];
+      btn.innerHTML=`<div class="ans-btn-hd"><div class="ans-ico">${AICO[i]}</div>${esc(a)}</div>${img?`<img class="ans-btn-img" src="${img}"/>`:''}`;
+      btn.onclick=()=>playerAnswer(i,room);ab.appendChild(btn);
+    });
+  }
   const el=Math.min(q.time,(Date.now()-(room.questionStartTime||Date.now()))/1000);
-  startPlayerTimer(Math.max(0,q.time-el),q.time);
+  startPlayerTimer(Math.max(0,q.time-el),q.time,room,isTA);
   showScreen('q-player');
 }
 
-function startPlayerTimer(rem,tot){
+function startPlayerTimer(rem,tot,room,isTA){
   stopTimer();let t=Math.round(rem);
   const fill=document.getElementById('pTimerFill'),num=document.getElementById('pTimerNum');
   fill.className='timer-fill';fill.style.transition='none';fill.style.width=((rem/tot)*100)+'%';num.textContent=t;
   void fill.offsetWidth;fill.style.transition=`width ${rem}s linear`;fill.style.width='0%';
-  gameTimer=setInterval(()=>{t--;num.textContent=Math.max(0,t);if(t<=Math.ceil(tot*.3))fill.className='timer-fill hot';if(t<=0){stopTimer();if(!myAnsweredThisRound)playerTimedOut();}},1000);
+  gameTimer=setInterval(()=>{
+    t--;num.textContent=Math.max(0,t);
+    if(t<=Math.ceil(tot*.3))fill.className='timer-fill hot';
+    if(t<=0){stopTimer();if(!myAnsweredThisRound){if(isTA)playerTATimedOut(room);else playerTimedOut();}}
+  },1000);
 }
 
 async function playerAnswer(idx,room){
@@ -1160,10 +1426,45 @@ async function playerAnswer(idx,room){
   await submitAnswer(room.qIndex,myPlayer.id,{pid:myPlayer.id,ansIdx:idx,time:el,correct:ok,points:0});
 }
 
+async function playerTASubmit(){
+  if(myAnsweredThisRound)return;
+  const inp=document.getElementById('pTaInput');
+  const typed=inp.value.trim();
+  if(!typed){toast('Type your answer first!','err');return;}
+  stopTimer();myAnsweredThisRound=true;
+  inp.disabled=true;
+  document.getElementById('pTaSubmitBtn').disabled=true;
+  document.getElementById('pTaHint').textContent='✅ Answer submitted — waiting for results…';
+  // Get current room to calculate time
+  const room=await getRoom();
+  const el=Math.max(.1,(Date.now()-(room.questionStartTime||Date.now()))/1000);
+  await submitAnswer(room.qIndex,myPlayer.id,{pid:myPlayer.id,ansIdx:-1,typed,time:el,correct:false,points:0});
+  document.getElementById('pAnsweredMsg').innerHTML=`<div class="answered-msg" style="color:var(--b);">📝 "${esc(typed)}"</div>`;
+  document.getElementById('pWaitMsg').textContent='Waiting for others…';
+}
+
 function playerTimedOut(){
   myAnsweredThisRound=true;
   document.querySelectorAll('.ans-btn').forEach(b=>b.disabled=true);
   document.getElementById('pAnsweredMsg').innerHTML=`<div class="answered-msg wrong">⏰ Time's up!</div>`;
+  document.getElementById('pWaitMsg').textContent='Waiting for results…';
+}
+
+async function playerTATimedOut(room){
+  myAnsweredThisRound=true;
+  const inp=document.getElementById('pTaInput');
+  const typed=inp.value.trim();
+  inp.disabled=true;
+  document.getElementById('pTaSubmitBtn').disabled=true;
+  if(typed){
+    // Auto-submit whatever they typed
+    document.getElementById('pTaHint').textContent='⏰ Time\'s up — submitting…';
+    const el=Math.max(.1,(Date.now()-(room.questionStartTime||Date.now()))/1000);
+    await submitAnswer(room.qIndex,myPlayer.id,{pid:myPlayer.id,ansIdx:-1,typed,time:el,correct:false,points:0});
+    document.getElementById('pAnsweredMsg').innerHTML=`<div class="answered-msg" style="color:var(--b);">📝 "${esc(typed)}"</div>`;
+  } else {
+    document.getElementById('pAnsweredMsg').innerHTML=`<div class="answered-msg wrong">⏰ Time's up!</div>`;
+  }
   document.getElementById('pWaitMsg').textContent='Waiting for results…';
 }
 
@@ -1173,37 +1474,116 @@ function playerTimedOut(){
 function showRoundResults(room,answers){
   stopTimer();
   const q=room.questions[room.qIndex];
+  const isTA=q.qtype==='ta';
+  const last=room.qIndex>=room.questions.length-1;
+
+  // ── Sticky top bar: top3 + Next button ──
+  const lbs=[...(room.players||[])].sort((a,b)=>(room.scores[b.id]||0)-(room.scores[a.id]||0));
+  const top3El=document.getElementById('rrTop3');top3El.innerHTML='';
+  const podOrder=lbs.length>=3?[1,0,2]:lbs.length===2?[1,0]:[0];
+  podOrder.forEach(i=>{
+    const p=lbs[i];if(!p)return;
+    const medals=['🥇','🥈','🥉'];
+    const d=document.createElement('div');d.className='rr-top3-item';
+    d.innerHTML=`<div style="font-size:.78rem;font-weight:800;color:${i===0?'var(--y)':i===1?'#c0c0c0':'#cd7f32'}">${medals[i]}</div>
+      <div class="rr-top3-av ${i===0?'rank1':''}" style="background:${p.color}22;border:2px solid ${p.color}">${p.emoji}</div>
+      <div class="rr-top3-nm">${esc(p.name)}</div>
+      <div class="rr-top3-sc">${(room.scores[p.id]||0).toLocaleString()}</div>`;
+    top3El.appendChild(d);
+  });
+
+  const nw=document.getElementById('rrNextWrap');
+  if(role==='host'){
+    nw.innerHTML=`<button class="btn btn-red btn-sm" onclick="${last?'hostEndGame()':'hostNextQuestion()'}">
+      ${last?'🏆 Final Results':'Next →'}</button>`;
+  } else {
+    nw.innerHTML=`<div style="color:var(--muted);font-weight:700;font-size:.82rem;">Waiting for host…</div>`;
+    lastRoomStatus='';
+  }
+
+  // ── Question + correct answer ──
   document.getElementById('rrQ').textContent=q.q;
-  document.getElementById('rrCor').textContent='✓ '+q.answers[q.correct];
+  if(isTA){
+    document.getElementById('rrCor').textContent='✓ '+((q.correctAnswers||[]).join(' / '));
+  } else {
+    document.getElementById('rrCor').textContent='✓ '+q.answers[q.correct];
+  }
+
+  // ── Word Cloud (Type Answer only) ──
+  const wcWrap=document.getElementById('rrWordCloud');
+  const wcEl=document.getElementById('rrCloudWords');
+  if(isTA){
+    wcWrap.style.display='block';
+    wcEl.innerHTML='';
+    // Count frequency of typed answers
+    const freq={};
+    answers.forEach(a=>{
+      const t=(a.typed||'').trim();
+      if(!t||t==='')return;
+      const key=t.toLowerCase();
+      freq[key]=(freq[key]||0)+1;
+    });
+    const maxFreq=Math.max(1,...Object.values(freq));
+    const wordColors=['#ff4d6d','#3a86ff','#ffd166','#06d6a0','#a855f7','#f72585','#4cc9f0','#ff9f1c'];
+    const accepted=(q.correctAnswers||[]).map(s=>s.trim().toLowerCase());
+    Object.entries(freq).sort((a,b)=>b[1]-a[1]).forEach(([word,cnt],wi)=>{
+      const size=0.85+((cnt/maxFreq)*1.4);
+      const isCorrect=accepted.includes(word);
+      const bg=isCorrect?'rgba(6,214,160,.15)':'rgba(255,255,255,.05)';
+      const border=isCorrect?'rgba(6,214,160,.4)':'rgba(255,255,255,.08)';
+      const color=isCorrect?'var(--g)':(wordColors[wi%wordColors.length]);
+      const w=document.createElement('div');w.className='wc-word';
+      w.style.cssText=`font-size:${size}rem;background:${bg};border:1px solid ${border};color:${color};`;
+      w.textContent=word+(cnt>1?` ×${cnt}`:'');
+      wcEl.appendChild(w);
+    });
+    if(!Object.keys(freq).length){
+      wcEl.innerHTML='<span style="color:var(--muted);font-weight:700;font-size:.9rem;">No answers submitted</span>';
+    }
+  } else {
+    wcWrap.style.display='none';
+  }
+
+  // ── Per-question results list ──
   const sorted=[...answers].sort((a,b)=>{if(a.correct&&!b.correct)return-1;if(!a.correct&&b.correct)return 1;return a.time-b.time;});
   const medals=['🥇','🥈','🥉'];
   const list=document.getElementById('rrList');list.innerHTML='';
   sorted.forEach((a,rank)=>{
     const p=(room.players||[]).find(pl=>pl.id===a.pid);if(!p)return;
-    const row=document.createElement('div');row.className='rr-row';row.style.animationDelay=(rank*.08)+'s';
-    row.innerHTML=`<div class="rr-pos">${a.correct?(medals[rank]||(rank+1)):'✗'}</div><div class="rr-av" style="background:${p.color}22;border:2px solid ${p.color}">${p.emoji}</div><div class="rr-info"><div class="rr-name">${esc(p.name)}</div><div class="rr-detail">${a.ansIdx===-1?'No answer':esc(q.answers[a.ansIdx])}${a.correct?`<span class="speed-tag">⚡ ${a.time.toFixed(1)}s</span>`:''}</div></div><div class="rr-pts ${a.correct?'pos':'neg'}">${a.correct?'+'+a.points:'0'}</div>`;
+    const row=document.createElement('div');row.className='rr-row';row.style.animationDelay=(rank*.06)+'s';
+    let detail='';
+    if(isTA){detail=a.typed?`"${esc(a.typed)}"`:' No answer';}
+    else{detail=a.ansIdx===-1?'No answer':esc(q.answers[a.ansIdx]);}
+    row.innerHTML=`<div class="rr-pos">${a.correct?(medals[rank]||(rank+1)):'✗'}</div>
+      <div class="rr-av" style="background:${p.color}22;border:2px solid ${p.color}">${p.emoji}</div>
+      <div class="rr-info">
+        <div class="rr-name">${esc(p.name)}</div>
+        <div class="rr-detail">${detail}${a.correct&&a.time<9000?`<span class="speed-tag">⚡ ${a.time.toFixed(1)}s</span>`:''}</div>
+      </div>
+      <div class="rr-pts ${a.correct?'pos':'neg'}">${a.correct?'+'+a.points:'0'}</div>`;
     list.appendChild(row);
   });
 
-  // Explanation block
-  const rrWrap = document.getElementById('rrList');
-  const existingExplain = document.getElementById('rrExplainBox');
-  if(existingExplain) existingExplain.remove();
+  // ── Explanation ──
+  const existingExplain=document.getElementById('rrExplainBox');
+  if(existingExplain)existingExplain.remove();
   if(q.explanation){
     const eb=document.createElement('div');
     eb.id='rrExplainBox';eb.className='rr-explain';
     eb.innerHTML=`<div class="rr-explain-lbl">💡 Explanation</div><div class="rr-explain-txt">${esc(q.explanation)}</div>`;
-    rrWrap.after(eb);
+    list.after(eb);
   }
 
-  const lbs=[...(room.players||[])].sort((a,b)=>(room.scores[b.id]||0)-(room.scores[a.id]||0));
+  // ── Standings ──
   const lbr=document.getElementById('lbMiniRows');lbr.innerHTML='';
-  lbs.forEach((p,i)=>{const g=i===0?'g1':i===1?'g2':i===2?'g3':'';lbr.innerHTML+=`<div class="lb-row"><div class="lb-rk ${g}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</div><div class="lb-av2" style="background:${p.color}22">${p.emoji}</div><div class="lb-nm">${esc(p.name)}</div><div class="lb-sc">${(room.scores[p.id]||0).toLocaleString()}</div></div>`;});
-  const last=room.qIndex>=room.questions.length-1;
-  const nw=document.getElementById('rrNextWrap');
-  if(role==='host')nw.innerHTML=`<button class="btn btn-red" onclick="${last?'hostEndGame()':'hostNextQuestion()'}"> ${last?'See Final Results 🏆':'Next Question →'}</button>`;
-  else{nw.innerHTML=`<div style="color:var(--muted);font-weight:700;font-size:.88rem;margin-top:8px;">Waiting for host…</div>`;lastRoomStatus='';}
+  lbs.forEach((p,i)=>{
+    const g=i===0?'g1':i===1?'g2':i===2?'g3':'';
+    lbr.innerHTML+=`<div class="lb-row"><div class="lb-rk ${g}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</div><div class="lb-av2" style="background:${p.color}22">${p.emoji}</div><div class="lb-nm">${esc(p.name)}</div><div class="lb-sc">${(room.scores[p.id]||0).toLocaleString()}</div></div>`;
+  });
+
   showScreen('round-res');
+  // Scroll to top so Next button is visible
+  document.getElementById('round-res').scrollTop=0;
 }
 
 // ═══════════════════════════════════════
@@ -1314,6 +1694,7 @@ function loadFolder(packId,append){
   const pack=getPack(packId);if(!pack){toast('Could not load folder','err');return;}
   if(!append){if(localQuestions.length>0&&!confirm(`Replace ${localQuestions.length} question(s) with "${pack.name}"?`))return;localQuestions=[...pack.questions];toast(`✅ Loaded "${pack.name}"`,'ok');}
   else{localQuestions=[...localQuestions,...pack.questions];toast(`➕ Added "${pack.name}" — ${localQuestions.length} total`,'ok');}
+  cancelEditQ();
   renderHostQuestions();switchToQTab();
 }
 
@@ -1383,14 +1764,8 @@ document.getElementById('loginUser').addEventListener('keydown',e=>{if(e.key==='
 document.getElementById('joinName').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('joinCode').focus();});
 document.getElementById('joinCode').addEventListener('keydown',e=>{if(e.key==='Enter')joinGame();});
 document.getElementById('newQ').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('a0').focus();});
+document.getElementById('pTaInput').addEventListener('keydown',e=>{if(e.key==='Enter')playerTASubmit();});
 
 // ═══════════════════════════════════════
 //  INIT
-// ═══════════════════════════════════════
-window.addEventListener('load',function(){
-  initFirebase();
-  showScreen('home');
-});
-</script>
-</body>
-</html>
+// �
