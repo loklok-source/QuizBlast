@@ -908,7 +908,7 @@ function setQType(type, btn) {
     // Hide all answer blocks — TA uses a single correct answer input
     [0,1,2,3].forEach(i => document.getElementById('ab'+i).style.display='none');
     grid.style.display='none';
-    // Show TA correct-answer field
+    // Show TA correct-answer field — create if not already in DOM
     let taField = document.getElementById('taCorrectWrap');
     if(!taField){
       taField = document.createElement('div');
@@ -917,7 +917,8 @@ function setQType(type, btn) {
       taField.innerHTML = `<div class="explanation-lbl">✅ Accepted Answers <span class="opt-badge" style="background:rgba(6,214,160,.1);border-color:rgba(6,214,160,.2);color:var(--g);">Separate with commas</span></div>
         <input class="inp" id="taCorrectInput" placeholder="e.g. Paris, paris, PARIS" />
         <div style="font-size:.7rem;color:var(--muted);font-weight:700;margin-top:4px;">Case-insensitive. Add variations separated by commas.</div>`;
-      grid.after(taField);
+      // Insert safely after grid (or at end of form if grid not found)
+      if(grid.parentNode) grid.parentNode.insertBefore(taField, grid.nextSibling);
     }
     taField.style.display='block';
   } else {
@@ -970,13 +971,25 @@ function setQType(type, btn) {
   hlCorrect();
 }
 async function showHostSetup(){
-  role='host';roomCode=randCode();
-  document.getElementById('displayCode').textContent=roomCode;
-  document.getElementById('shareCodeInline').textContent=roomCode;
-  await setRoom({code:roomCode,status:'setup',qIndex:0,questionStartTime:0,players:[],questions:[],scores:{},answers:{},version:0});
-  renderHostPlayers([]);renderHostQuestions();
-  showScreen('host-setup');
-  listenRoom(room=>{if(room.status==='setup')renderHostPlayers(room.players||[]);});
+  // Guard: make sure Firebase is ready
+  if(!db){
+    const ok=initFirebase();
+    if(!ok){toast('Firebase not ready — please refresh the page','err');return;}
+  }
+  role='host'; roomCode=randCode();
+  // Show loading feedback immediately
+  toast('🔄 Creating room…');
+  try{
+    document.getElementById('displayCode').textContent=roomCode;
+    document.getElementById('shareCodeInline').textContent=roomCode;
+    await setRoom({code:roomCode,status:'setup',qIndex:0,questionStartTime:0,players:[],questions:[],scores:{},answers:{},version:0});
+    renderHostPlayers([]);renderHostQuestions();
+    showScreen('host-setup');
+    listenRoom(room=>{if(room.status==='setup')renderHostPlayers(room.players||[]);});
+  } catch(e){
+    console.error('Host setup failed:',e);
+    toast('Could not create room — check your internet connection','err');
+  }
 }
 
 function renderHostPlayers(pls){
@@ -1174,17 +1187,21 @@ async function goToLobby(){
   if(!localQuestions.length){toast('Add at least 1 question!','err');return;}
   stopListen();
   const scores={};players.forEach(p=>scores[p.id]=0);
-  // Randomise if toggled
   let qs=[...localQuestions];
   if(document.getElementById('randomiseToggle').checked){
     for(let i=qs.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[qs[i],qs[j]]=[qs[j],qs[i]];}
     toast('🔀 Questions randomised!');
   }
-  await setRoom({code:roomCode,status:'lobby',qIndex:0,questionStartTime:0,players,questions:qs,scores,answers:{},version:1});
-  document.getElementById('lobbyCode').textContent=roomCode;
-  renderLobby(players);
-  document.getElementById('lobbyStatusTxt').parentElement.innerHTML=`<button class="btn btn-teal" onclick="hostStartGame()">Start Game 🎮</button>`;
-  showScreen('lobby');
+  try{
+    await setRoom({code:roomCode,status:'lobby',qIndex:0,questionStartTime:0,players,questions:qs,scores,answers:{},version:1});
+    document.getElementById('lobbyCode').textContent=roomCode;
+    renderLobby(players);
+    document.getElementById('lobbyStatusTxt').parentElement.innerHTML=`<button class="btn btn-teal" onclick="hostStartGame()">Start Game 🎮</button>`;
+    showScreen('lobby');
+  } catch(e){
+    toast('Could not open lobby — check your internet connection','err');
+    console.error('goToLobby failed:',e);
+  }
 }
 
 // ═══════════════════════════════════════
@@ -1244,8 +1261,13 @@ function handleRoomUpdate(room){
 //  GAME — HOST
 // ═══════════════════════════════════════
 async function hostStartGame(){
-  await updateRoom({status:'question',qIndex:0,questionStartTime:firebase.database.ServerValue.TIMESTAMP,version:2});
-  const room=await getRoom();hostShowQuestion(room);
+  try{
+    await updateRoom({status:'question',qIndex:0,questionStartTime:firebase.database.ServerValue.TIMESTAMP,version:2});
+    const room=await getRoom();hostShowQuestion(room);
+  } catch(e){
+    toast('Could not start game — check your internet connection','err');
+    console.error('hostStartGame failed:',e);
+  }
 }
 
 async function hostShowQuestion(room){
@@ -1768,4 +1790,4 @@ document.getElementById('pTaInput').addEventListener('keydown',e=>{if(e.key==='E
 
 // ═══════════════════════════════════════
 //  INIT
-// �
+//  
